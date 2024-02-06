@@ -39,21 +39,48 @@ input {
 #imageArea {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-around;
+    justify-content: center;
 
 }
 
 
-a {
-    display: inline;
-    margin: 0;
-}
-
-img {
-    background-color: rgb(200, 200, 100);
-    display: inline;
+.bgPatterns {
+    background-image: url('images/pattern.png');
+    background-repeat: no-repeat;
+    background-size: contain;
     width: 10rem;
     height: 10rem;
     margin: 0;
+
+}
+
+img {
+    /* background-image: 'images/no.png'; */
+    padding: 0.5rem;
+    display: block;
+    width: 10rem;
+    height: 10rem;
+    margin: auto auto;
     object-fit: contain;
+
+}
+
+a {
+    position: absolute;
+    bottom: 0%;
+    z-index: 10;
+    font-size: 3rem;
+    target: "_blank";
+}
+
+a:hover {
+    background-color: rgb(220, 110, 190);
+}
+
+#focusImg {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
 }

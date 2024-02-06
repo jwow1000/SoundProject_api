@@ -1,4 +1,5 @@
 const baseUrl = 'https://api.discogs.com';
+let imgFocused = false;
 
 const myToken = 'dgoPiRdAagChWVYQqpfTKEYSVAJGpdSpPxuisxkx';
 const printArt1 = document.querySelector('#printArt1');
@@ -18,26 +19,57 @@ theForm.addEventListener('submit', handleSubmit);
 
 async function getFirstFive(s) {
     console.log(`searching for ${s}`);
-    const response = await fetch(`${baseUrl}/database/search?q=${s}&token=${myToken}`);
+    const response = await fetch(`${baseUrl}/database/search?q=${s}?page=1&per_page=10&token=${myToken}`);
     const data = await response.json();
 
     // clear image area
     imgArea.innerHTML = ``;
     console.log(data);
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
+        // make a 'a' element
+        const newDiv = document.createElement('div');
+        //const nestedNoImg = document.createElement('img');
         const nestedImg = document.createElement('img');
-        const newA = document.createElement('a')
         // add the discogs link
-        newA.href = `https://www.discogs.com${data.results[i].uri}`;
+        const makeAlink = `https://www.discogs.com${data.results[i].uri}`;
+        if (makeAlink) {
+            nestedImg.dataset.link = makeAlink;
+        }
+        nestedImg.dataset.title = data.results[i].title;
         // give the a tags a target = _blank to open new tab
-        newA.setAttribute('target', '_blank');
+        // newDiv.setAttribute('target', '_blank');
+        // set the no-img source
+
+        newDiv.setAttribute('class', 'bgPatterns');
+
         // set the img source
         nestedImg.src = data.results[i].cover_image;
         // append to the document
-        imgArea.appendChild(newA);
-        newA.appendChild(nestedImg);
+        imgArea.appendChild(newDiv);
+        //newA.appendChild(nestedNoImg);
+        newDiv.appendChild(nestedImg);
 
     }
 }
+
+imgArea.addEventListener('click', function (e) {
+    console.log(e.target);
+    if (imgFocused !== true) {
+        e.target.setAttribute('id', 'focusImg');
+        const discLinks = document.createElement('a');
+        discLinks.innerText = 'discogs link';
+        discLinks.href = e.target.dataset.link;
+        imgArea.appendChild(discLinks);
+        imgFocused = true;
+        // const newEsc = document.createElement('img');
+        // newEsc.src = 'images/esc-button.png';
+        // newEsc.style.zIndex = 2;
+        // e.target.appendChild(newEsc);
+
+    } else {
+        e.target.removeAttribute('focusImg');
+        imgFocused = false;
+    }
+})
 
