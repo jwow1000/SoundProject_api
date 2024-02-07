@@ -27,19 +27,20 @@ async function getFirstFive(s) {
     console.log(data);
 
     for (let i = 0; i < 10; i++) {
-        // make a 'a' element
+        // make a 'div' element
         const newDiv = document.createElement('div');
         //const nestedNoImg = document.createElement('img');
         const nestedImg = document.createElement('img');
+        // with a coolImg class
+        nestedImg.dataset.coolImg = true;
         // add the discogs link
         const makeAlink = `https://www.discogs.com${data.results[i].uri}`;
         if (makeAlink) {
             nestedImg.dataset.link = makeAlink;
         }
         nestedImg.dataset.title = data.results[i].title;
-        // give the a tags a target = _blank to open new tab
-        // newDiv.setAttribute('target', '_blank');
-        // set the no-img source
+        nestedImg.setAttribute('class', 'coolImg');
+
 
         newDiv.setAttribute('class', 'bgPatterns');
 
@@ -54,22 +55,66 @@ async function getFirstFive(s) {
 }
 
 imgArea.addEventListener('click', function (e) {
-    console.log(e.target);
-    if (imgFocused !== true) {
-        e.target.setAttribute('id', 'focusImg');
-        const discLinks = document.createElement('a');
-        discLinks.innerText = 'discogs link';
-        discLinks.href = e.target.dataset.link;
-        imgArea.appendChild(discLinks);
-        imgFocused = true;
-        // const newEsc = document.createElement('img');
-        // newEsc.src = 'images/esc-button.png';
-        // newEsc.style.zIndex = 2;
-        // e.target.appendChild(newEsc);
+    console.log(e.target.dataset.secLink);
+    if (e.target.dataset.coolImg) {
+        if (imgFocused === false) {
+            e.target.setAttribute('id', 'focusImg');
+            // create the discogs link
+            const discLinks = document.createElement('a');
+            discLinks.innerText = 'discogs link';
+            discLinks.setAttribute('id', 'discLink');
+            discLinks.dataset.secLink = 'discLink';
+            // create the reSearch link
+            const reSearch = document.createElement('a');
+            reSearch.innerText = 'reSearch';
+            reSearch.setAttribute('id', 'reSearch');
+            reSearch.dataset.secLink = 'reSearch';
 
-    } else {
-        e.target.removeAttribute('focusImg');
-        imgFocused = false;
+            // create the youtube link
+            const youTube = document.createElement('a');
+            youTube.innerText = 'link 2 youtube';
+            youTube.setAttribute('id', 'youTube');
+            youTube.dataset.secLink = 'youTube';
+
+
+            imgArea.appendChild(discLinks);
+            imgArea.appendChild(reSearch);
+            imgArea.appendChild(youTube);
+
+            imgFocused = true;
+
+        } else {
+            // find the img with the focusImg
+            e.target.setAttribute('id', '');
+            const delLink = imgArea.querySelectorAll('a');
+            console.log(delLink);
+            for (let i = 0; i < delLink.length; i++) {
+                delLink[i].remove();
+            }
+
+            imgFocused = false;
+        }
+
     }
-})
 
+    if (e.target.dataset.secLink === 'reSearch') {
+        getFirstFive(e.target.dataset.title);
+    }
+    if (e.target.dataset.secLink === 'youTube') {
+        youTube();
+    }
+    if (e.target.dataset.secLink === 'discLink') {
+        console.log(e.target.dataset.link);
+    }
+});
+
+// function events for the focus links
+function reSearch(s) {
+    getFirstFive(s);
+}
+function youTube(s) {
+    console.log('take me to youtube');
+}
+function discLinks(s) {
+    console.log('take me to youtube');
+}

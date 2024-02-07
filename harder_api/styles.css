@@ -19,8 +19,6 @@ body {
 
 }
 
-#submit {}
-
 button {
     width: 8rem;
     height: 4rem;
@@ -54,23 +52,39 @@ input {
 
 }
 
-img {
-    /* background-image: 'images/no.png'; */
+.coolImg {
     padding: 0.5rem;
     display: block;
     width: 10rem;
     height: 10rem;
-    margin: auto auto;
+    margin: 0;
     object-fit: contain;
-
 }
 
+
 a {
-    position: absolute;
+    position: fixed;
     bottom: 0%;
     z-index: 10;
     font-size: 3rem;
     target: "_blank";
+}
+
+#youTube {
+    position: fixed;
+    bottom: 0%;
+    right: 0%;
+}
+
+#reSearch {
+    position: fixed;
+    bottom: 0%;
+}
+
+#discLink {
+    position: fixed;
+    bottom: 0%;
+    left: 0%;
 }
 
 a:hover {
@@ -78,7 +92,7 @@ a:hover {
 }
 
 #focusImg {
-    position: absolute;
+    position: fixed;
     top: 10%;
     left: 10%;
     width: 80%;
