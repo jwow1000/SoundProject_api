@@ -1,27 +1,54 @@
 // api stuff
+
+
 const baseUrl = 'https://api.discogs.com';
 const myToken = 'dgoPiRdAagChWVYQqpfTKEYSVAJGpdSpPxuisxkx';
 // global variable for focus
 let imgFocused = false;
 
 // declare submit page, image area, and search bar
-const theForm = document.querySelector('#submit');
+const theForm = document.querySelector('#theForm');
 const imgArea = document.querySelector('#imageArea');
 const userInput = document.querySelector('#search');
+const randoButt = document.querySelector('#randoButt');
 
 const handleSubmit = function (e) {
     e.preventDefault();
-    const song = e.target[0].value;
-    console.log(song);
-    getFirstFive(song);
-
+    console.log(e);
+    // input value
+    const search = e.target[0].value;
+    getFirstFive(search);
 }
-
 theForm.addEventListener('submit', handleSubmit);
+
+randoButt.addEventListener('click', function (event) {
+    event.stopImmediatePropagation();
+    const rand = getRando();
+    console.log('random', rand);
+    //userInput.value = rand;
+})
+
+// random button function
+async function getRando() {
+    let randomNum = (Math.random() * 300000) + 200;
+    const floorRando = Math.floor(randomNum);
+    const response = await fetch(`${baseUrl}/labels/${floorRando}&token=${myToken}`, {
+        headers: {
+            'User-Agent': `reSearchDiscogs/1.0 +https://github.com/jwow1000/SoundProject_api`
+        }
+    });
+    const data = await response.json();
+    console.log(data.name);
+    return data.name;
+}
 
 async function getFirstFive(s) {
     console.log(`searching for ${s}`);
-    const response = await fetch(`${baseUrl}/database/search?q=${s}&type=all&token=${myToken}`);
+    const response = await fetch(`${baseUrl}/database/search?q=${s}&type=all&token=${myToken}`, {
+        headers: {
+            'User-Agent': `reSearchDiscogs/1.0 +https://github.com/jwow1000/SoundProject_api`
+        }
+    });
     const data = await response.json();
 
     // clear image area
@@ -83,8 +110,6 @@ imgArea.addEventListener('click', function (e) {
             youTube.dataset.secLink = 'youTube';
             youTube.dataset.title = e.target.dataset.title;
 
-
-
             imgArea.appendChild(discLinks);
             imgArea.appendChild(reSearch);
             imgArea.appendChild(youTube);
@@ -128,13 +153,3 @@ imgArea.addEventListener('click', function (e) {
     }
 });
 
-// function events for the focus links
-function reSearch(s) {
-
-}
-function youTube(s) {
-    console.log('take me to youtube');
-}
-function discLinks(s) {
-    console.log('take me to youtube');
-}

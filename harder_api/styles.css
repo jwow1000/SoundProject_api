@@ -19,19 +19,40 @@ body {
 
 }
 
-button {
-    width: 8rem;
-    height: 4rem;
-    margin: 1rem auto;
-    display: block;
+#theForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 60% 40%;
+    grid-template-areas:
+        "input input"
+        "search rando";
+
 }
 
 input {
+    grid-area: input;
     width: 90%;
-    height: 5rem;
+    height: 2rem;
     display: block;
     margin: 1rem auto;
-    font-size: 4rem;
+    font-size: 1rem;
+    text-align: center;
+}
+
+#searchButt {
+    grid-area: search;
+    margin: auto;
+    width: 8rem;
+    height: 2rem;
+
+}
+
+#randoButt {
+    grid-area: rando;
+    margin: auto;
+    width: 8rem;
+    height: 2rem;
+
 }
 
 #imageArea {
@@ -61,29 +82,82 @@ input {
     object-fit: contain;
 }
 
+/* scale up for smaller windows and tablets */
+@media (min-width: 600px) and (max-width: 1199px) {
+    .coolImg {
+        width: 15rem;
+        height: 15rem;
+    }
+
+    .bgPatterns {
+        width: 15rem;
+        height: 15rem;
+    }
+
+    input {
+        height: 4rem;
+        font-size: 3rem;
+    }
+
+    button {
+        width: 8rem;
+        height: 4rem;
+    }
+}
+
+/* sclae up full screen monitors/laptops */
+@media (min-width: 1200px) {
+    .coolImg {
+        width: 17rem;
+        height: 17rem;
+    }
+
+    .bgPatterns {
+        width: 17rem;
+        height: 17rem;
+    }
+
+    input {
+        height: 5rem;
+        font-size: 4rem;
+    }
+
+    button {
+        width: 15rem;
+        height: 4rem;
+    }
+}
 
 a {
     position: fixed;
     bottom: 0%;
     z-index: 10;
     font-size: 3rem;
-    target: "_blank";
+
 }
 
 #youTube {
+    color: rgb(243, 133, 255);
+    backdrop-filter: invert(60%);
     position: fixed;
-    bottom: 0%;
+    bottom: 1%;
     right: 0%;
 }
 
 #reSearch {
+    color: rgb(243, 133, 255);
+
+    backdrop-filter: invert(60%);
     position: fixed;
-    bottom: 0%;
+    bottom: 1%;
 }
 
 #discLink {
+    color: rgb(243, 133, 255);
+
+    backdrop-filter: invert(60%);
     position: fixed;
-    bottom: 0%;
+    bottom: 1%;
     left: 0%;
 }
 
