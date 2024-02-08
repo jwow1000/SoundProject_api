@@ -1,6 +1,4 @@
 // api stuff
-
-
 const baseUrl = 'https://api.discogs.com';
 const myToken = 'dgoPiRdAagChWVYQqpfTKEYSVAJGpdSpPxuisxkx';
 // global variable for focus
@@ -9,41 +7,70 @@ let imgFocused = false;
 // declare submit page, image area, and search bar
 const theForm = document.querySelector('#theForm');
 const imgArea = document.querySelector('#imageArea');
-const userInput = document.querySelector('#search');
+const searchBar = document.querySelector('#searchBar');
+const userInput = document.querySelector('#userInput');
+const searchButt = document.querySelector('#searchButt');
 const randoButt = document.querySelector('#randoButt');
 
 const handleSubmit = function (e) {
     e.preventDefault();
-    console.log(e);
     // input value
     const search = e.target[0].value;
     getFirstFive(search);
 }
-theForm.addEventListener('submit', handleSubmit);
+const handleClick = function (e) {
+    e.preventDefault();
+    // input value
+    const search = userInput.value;
+    getFirstFive(search);
+}
 
-randoButt.addEventListener('click', function (event) {
-    event.stopImmediatePropagation();
-    const rand = getRando();
-    console.log('random', rand);
-    //userInput.value = rand;
-})
+searchBar.addEventListener('submit', handleSubmit);
+searchButt.addEventListener('click', handleClick);
+
+randoButt.addEventListener('click', getRando);
 
 // random button function
 async function getRando() {
-    let randomNum = (Math.random() * 300000) + 200;
+    // get random labels artists, releases
+    let which = 'artists';
+    let randoIndex = Math.floor(Math.random() * 3);
+    switch (randoIndex) {
+        case 0:
+            which = 'labels';
+            break;
+        case 1:
+            which = 'artists';
+            break;
+        case 2:
+            which = 'releases';
+            break
+    }
+
+    // console.log("Random index: ", randoIndex, which)
+    let randomNum = (Math.random() * 200000);
+    // console.log('which', which, randoIndex);
     const floorRando = Math.floor(randomNum);
-    const response = await fetch(`${baseUrl}/labels/${floorRando}&token=${myToken}`, {
+    const response = await fetch(`${baseUrl}/${which}/${floorRando}`, {
         headers: {
             'User-Agent': `reSearchDiscogs/1.0 +https://github.com/jwow1000/SoundProject_api`
         }
     });
     const data = await response.json();
-    console.log(data.name);
-    return data.name;
+    // console.log("Data: ", data)
+
+    if (data.message) {
+        //console.log("inside of recursive loop")
+        getRando()
+        return
+    }
+    // console.log('this is the data', data.name);
+    const searchTerm = data.title || data.name
+    getFirstFive(searchTerm);
+    userInput.value = searchTerm;
 }
 
 async function getFirstFive(s) {
-    console.log(`searching for ${s}`);
     const response = await fetch(`${baseUrl}/database/search?q=${s}&type=all&token=${myToken}`, {
         headers: {
             'User-Agent': `reSearchDiscogs/1.0 +https://github.com/jwow1000/SoundProject_api`
@@ -53,9 +80,22 @@ async function getFirstFive(s) {
 
     // clear image area
     imgArea.innerHTML = ``;
-    console.log(data);
+    console.log("getFirstFive Data: ", data);
+    // let randoInt = (Math.floor(Math.random() * 5)) * 10;
 
-    for (let i = 0; i < 10; i++) {
+    let arrLength = 0; // data.results.length < 10 ? data.results.length : 10;
+
+    if (data.results.length < 10) {
+        arrLength = data.results.length;
+        arrMin = 0;
+    } else {
+        const len = Math.floor(data.results.length / 10);
+        const rand10 = Math.floor(Math.random() * len) * 10;
+        arrMin = rand10;
+        arrLength = rand10 + 10;
+    }
+
+    for (let i = arrMin; i < arrLength; i++) {
         // make a 'div' element
         const newDiv = document.createElement('div');
         //const nestedNoImg = document.createElement('img');
