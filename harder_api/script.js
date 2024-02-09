@@ -108,6 +108,8 @@ async function getFirstFive(s) {
             nestedImg.dataset.link = makeAlink;
         }
         nestedImg.dataset.title = data.results[i].title;
+        // dataset a link to the resource
+        nestedImg.dataset.resource = data.results[i].resource_url;
         nestedImg.setAttribute('class', 'coolImg');
 
 
@@ -125,7 +127,7 @@ async function getFirstFive(s) {
 }
 
 imgArea.addEventListener('click', function (e) {
-    console.log(e.target.dataset.secLink);
+    //console.log(e.target.dataset.secLink);
     if (e.target.dataset.coolImg) {
         if (imgFocused === false) {
             e.target.setAttribute('id', 'focusImg');
@@ -148,7 +150,8 @@ imgArea.addEventListener('click', function (e) {
             youTube.innerText = 'link 2 youtube';
             youTube.setAttribute('id', 'youTube');
             youTube.dataset.secLink = 'youTube';
-            youTube.dataset.title = e.target.dataset.title;
+            // console.log('is this a videolink', getVideo(e.target.dataset.resource));
+            youTube.dataset.youTube = e.target.dataset.resource;
 
             imgArea.appendChild(discLinks);
             imgArea.appendChild(reSearch);
@@ -181,11 +184,10 @@ imgArea.addEventListener('click', function (e) {
         userInput.value = e.target.dataset.title;
     }
     if (e.target.dataset.secLink === 'youTube') {
-        const point = e.target.dataset.title;
-        console.log(point);
-        const link = `https://www.youtube.com/results?search_query=${point}`;
-        window.open(link, '_blank');
+        const point = e.target.dataset.youTube;
+        getVideo(point);
     }
+
     if (e.target.dataset.secLink === 'discLink') {
         console.log(e.target);
         window.open(`${e.target.dataset.link}`, '_blank');
@@ -193,3 +195,19 @@ imgArea.addEventListener('click', function (e) {
     }
 });
 
+async function getVideo(url) {
+    // get resource_url if this is not a release
+    const point = url;
+    // resorce data has the video location.
+    const response = await fetch(point, {
+        headers: {
+            'User-Agent': `reSearchDiscogs/1.0 +https://github.com/jwow1000/SoundProject_api`
+        }
+    });
+    const data = await response.json();
+    //console.log('here is all the data', data.artists);
+
+    const link = data.videos[0].uri;
+    // return the video link
+    window.open(link, '_blank');
+}
