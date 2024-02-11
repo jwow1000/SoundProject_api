@@ -209,5 +209,11 @@ async function getVideo(url) {
 
     const link = data.videos[0].uri;
     // return the video link
-    window.open(link, '_blank');
+    let newLink = '';
+    if (link) {
+        newLink = link;
+    } else {
+        newLink = data.title;
+    }
+    window.open(newLink, '_blank');
 }
